@@ -104,6 +104,9 @@
             <logger category="org.jboss.as.config">
                 <level name="DEBUG"/>
             </logger>
+            <logger category="org.apache.activemq">
+                <level name="INFO"/>
+            </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
@@ -375,9 +378,11 @@
                     <param name="key-store-path" value="${keystore.path}"/>
                     <param name="key-store-password" value="${keystore.password}"/>
                     <param name="key-store-provider" value="${keystore.provider:JKS}"/>
+                    <!-- Explicit trust store settings required, or it'll use the default cacerts to verify the client -->
                     <param name="trust-store-path" value="${truststore.path}"/>
                     <param name="trust-store-password" value="${truststore.password}"/>
                     <param name="trust-store-provider" value="${truststore.provider:JKS}"/>
+                    <param name="needs-client-auth" value="true"/>
                 </remote-acceptor>
                 <in-vm-acceptor name="in-vm" server-id="0"/>
                 <cluster-connection name="my-cluster" static-connectors="remote-connector-slave" connector-name="remote-connector" address="jms"/>

@@ -1,27 +1,29 @@
-# remote brokers with TLS
+# remote brokers with TLS and mutual auth
 
 Example configuration of connecting to a live/backup broker pair over TLS:
 
 - 1 EAP server acting as live broker
 - 1 EAP server acting as backup broker
 - 1 EAP server running a client application
+- Client authentication (mutual authentication) configured using certificates
 
 First, create servers:
 
     export JBOSS_HOME=/path/to/your/jboss
-    cd $JBOSS_HOME
 
-    cp -a ./standalone ./broker1
-    cp -a ./standalone ./broker2
-    cp -a ./standalone ./client
+    cp -a $JBOSS_HOME/standalone $JBOSS_HOME/broker1
+    cp -a $JBOSS_HOME/standalone $JBOSS_HOME/broker2
+    cp -a $JBOSS_HOME/standalone $JBOSS_HOME/client
 
 Then copy the sample config files across:
 
-- Copy `standalone-full-ha-broker1.xml` -> `$JBOSS_HOME/broker1/configuration/standalone-full-ha.xml`
-- Copy `standalone-full-ha-broker2.xml` -> `$JBOSS_HOME/broker2/configuration/standalone-full-ha.xml`
-- Copy `standalone-full-ha-client.xml` -> `$JBOSS_HOME/client/configuration/standalone-full-ha.xml`
+    cp standalone-full-ha-broker1.xml $JBOSS_HOME/broker1/configuration/standalone-full-ha.xml
+    cp standalone-full-ha-broker2.xml $JBOSS_HOME/broker2/configuration/standalone-full-ha.xml
+    cp standalone-full-ha-client.xml $JBOSS_HOME/client/configuration/standalone-full-ha.xml
 
 Create keystores, truststores and launch the servers:
+
+    cd $JBOSS_HOME
 
     ./bin/add-user.sh -sc broker1/configuration -a -u 'jeffrey' -p 'jeffrey' -g 'guest'
     ./bin/add-user.sh -sc broker2/configuration -a -u 'jeffrey' -p 'jeffrey' -g 'guest'
@@ -106,22 +108,22 @@ Create keystores, truststores and launch the servers:
     export JAVA_OPTS="-Djavax.net.debug=ssl,handshake"
 
     ./bin/standalone.sh -Djboss.node.name=broker1 \
-        -Djboss.server.base.dir=$JBOSS_HOME/broker1 \
-        -Dkeystore.path=$JBOSS_HOME/broker1.jceks \
+        -Djboss.server.base.dir=./broker1 \
+        -Dkeystore.path=./broker1.jceks \
         -Dkeystore.password=changeit \
         -Dkeystore.provider=JCEKS \
-        -Dtruststore.path=$JBOSS_HOME/broker1.ts \
+        -Dtruststore.path=./broker1.ts \
         -Dtruststore.password=changeit \
         -Dtruststore.provider=JCEKS \
         -c standalone-full-ha.xml
 
     ./bin/standalone.sh -Djboss.node.name=broker2 \
         -Djboss.socket.binding.port-offset=100 \
-        -Djboss.server.base.dir=$JBOSS_HOME/broker2 \
-        -Dkeystore.path=$JBOSS_HOME/broker2.jceks \
+        -Djboss.server.base.dir=./broker2 \
+        -Dkeystore.path=./broker2.jceks \
         -Dkeystore.password=changeit \
         -Dkeystore.provider=JCEKS \
-        -Dtruststore.path=$JBOSS_HOME/broker2.ts \
+        -Dtruststore.path=./broker2.ts \
         -Dtruststore.password=changeit \
         -Dtruststore.provider=JCEKS \
         -c standalone-full-ha.xml
