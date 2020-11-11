@@ -532,6 +532,7 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <ajp-listener name="ajp" socket-binding="ajp"/>
+                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" proxy-address-forwarding="true" enable-http2="true"/>
                 <http-listener name="default" socket-binding="http" redirect-socket="https" proxy-address-forwarding="true" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
