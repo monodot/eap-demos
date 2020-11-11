@@ -16,7 +16,13 @@ Generate a self-signed cert for the app, pop it into a Java keystore, and put th
 
 Process the https-s2i template, to create an EAP instance serving HTTPS using the self-signed cert:
 
-    oc process -f eap73-https-s2i.json -p APPLICATION_NAME=eap-ssl -p SOURCE_REPOSITORY_URL=https://github.com/monodot/eap-demos.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR=helloworld-props -p HTTPS_PASSWORD=changeit -p IMAGE_STREAM_NAMESPACE=$(oc project -q) 
+    oc process -f eap73-https-s2i.json \ 
+        -p APPLICATION_NAME=eap-ssl \ 
+        -p SOURCE_REPOSITORY_URL=https://github.com/monodot/eap-demos.git \ 
+        -p SOURCE_REPOSITORY_REF=master \ 
+        -p CONTEXT_DIR=helloworld-props \ 
+        -p HTTPS_PASSWORD=changeit \ 
+        -p IMAGE_STREAM_NAMESPACE=$(oc project -q) | oc apply -f -
 
 With `openssl`, verify that the server is presenting the correct certificate:
 
