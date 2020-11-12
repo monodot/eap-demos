@@ -2,7 +2,9 @@
 
 Testing whether some keystore password property can be expanded on startup.
 
-## Set up EAP as normal - test regular SSL function via environment variables
+## Set up EAP as normal: test default SSL auto-configuration via 'HTTPS_' environment variables
+
+We'll first test using the `eap73-https-s2i` template, and the `HTTPS_PASSWORD` environment variable, which is used by the EAP startup script to auto-configure an HTTPS listener and keystore.
 
 Set up Red Hat registry credentials and import the EAP 7.3 image:
 
@@ -38,7 +40,9 @@ This should show something like _"L = Gimmerton"_:
             Signature Algorithm: sha256WithRSAEncryption
             Issuer: L = Gimmerton, CN = server
 
-## Use a custom standalone-openshift.xml with keystore properties from env vars
+## Custom SSL config: Use a custom standalone-openshift.xml with keystore properties from env vars
+
+Now we'll change this config to use a custom EAP base image, with a custom `standalone-openshift.xml`, and some custom env vars for the keystore location and password.
 
 Build a new custom base image, with a custom standalone-openshift.xml:
 
